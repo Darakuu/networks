@@ -47,7 +47,7 @@ int main(int argc, char**argv)
 		len = sizeof(remote_addr);
 		newsockfd = accept(sockfd, (struct sockadddr *) &remote_addr, &len);
 		pid = fork();
-		if (pid == 0) // figlio
+		if (pid == 0) // child
 		{
 			close(sockfd);
 			for(;;)
