@@ -1,3 +1,4 @@
+// To be used along with TCP_Client
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -17,7 +18,7 @@ int main(int argc, char**argv)
 
 	if (argc<2)
 	{
-		printf("USA: server_tcp <PORTA>\n");
+		printf("Use: server_tcp <PORT>\n");
 		return 0;
 	}
 
@@ -25,7 +26,7 @@ int main(int argc, char**argv)
 
 	if (sockfd < 0)
 	{
-		printf("Errore apertura socket\n");
+		printf("Error while attempting to open socket\n");
 		return -1;
 	}
 
@@ -36,7 +37,7 @@ int main(int argc, char**argv)
 
 	if(bind(sockfd,(struct sockaddr *) &local_addr, sizeof(local_addr))<0)
 	{
-		printf("Errore di socket binding: %d\n",errno);
+		printf("Socket binding error: %d\n",errno);
 		return -1;
 	}
 
@@ -55,7 +56,7 @@ int main(int argc, char**argv)
 				n = recv(newsockfd,msg,999,0);
 				if (n == 0) return 0;
 				msg[n] = 0;
-				printf("PID[%d]: ricevuto da %s:%d => [\"%s\"]\n",
+				printf("PID[%d]: Received by %s:%d => [\"%s\"]\n",
 						getpid(),inet_ntoa(remote_addr.sin_addr),
 						ntohs(remote_addr.sin_port),msg);
 				send(newsockfd,msg,n,0);
