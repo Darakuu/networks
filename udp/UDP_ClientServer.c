@@ -1,4 +1,4 @@
-// UDP Client con ricezione Broadcast
+// UDP Client with Broadcast reception
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -41,10 +41,10 @@ int main(int argc, char*argv[])
 	sockbd=socket(AF_INET,SOCK_DGRAM,IPPROTO_UDP);
 	setsockopt(sockbd,SOL_SOCKET,SO_BROADCAST, &broadcastperm, sizeof(broadcastperm));
 
-	memset( &remote_addr, 0, sizeof(remote_addr));		// pulisci memoria
-	remote_addr.sin_family = AF_INET;			// famiglia socket (IPv4)
-	remote_addr.sin_addr.s_addr = inet_addr(argv[1]); 	// setto indirizzo
-	remote_addr.sin_port = htons(atoi(argv[2]));		// setto porta
+	memset( &remote_addr, 0, sizeof(remote_addr));		// clean memory
+	remote_addr.sin_family = AF_INET;			// socket family (IPv4)
+	remote_addr.sin_addr.s_addr = inet_addr(argv[1]); 	// setting socket address
+	remote_addr.sin_port = htons(atoi(argv[2]));		// setting socket port
 	
 	broadcast_addr.sin_family = AF_INET;
 	broadcast_addr.sin_port = htons(33340);
@@ -55,7 +55,7 @@ int main(int argc, char*argv[])
 	{
 		sendto(sockfd,sendline,strlen(sendline),0,(struct sockaddr*) &remote_addr,
 				sizeof(remote_addr));
-		printf("Ho appena mandato [%s]\n", sendline);	
+		printf("I have just sent: [%s]\n", sendline);	
 		memset(&sendline,0,strlen(sendline));
 		recvfrom(sockbd,recvline,1000,0,(struct sockaddr*) &broadcast_addr, &blen);
 		printf("\nFrom [%s:%d]: \"%s\"\n",
