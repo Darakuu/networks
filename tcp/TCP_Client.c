@@ -1,3 +1,4 @@
+// To be used along with TCP_Server
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -27,7 +28,7 @@ int main(int argc, char*argv[])
 
 	if (argc != 3)
 	{
-		printf("USA: client_tcp <IP> <PORTA>\n");
+		printf("Use: client_tcp <IP> <PORT>\n");
 		return 1;
 	}
 
@@ -42,12 +43,12 @@ int main(int argc, char*argv[])
 
 	while(sendmsg!=NULL)
 	{
-		printf("Scrivi il messaggio: ");
+		printf("Enter message: ");
 		sendmsg = fgets_nonl(sendmsg,999,stdin);
 		send(sockfd,sendmsg,strlen(sendmsg),0);
 		n = recv(sockfd,recvmsg,999,0);
 		recvmsg[n] = 0;
-		printf("PID=[%d]: Ricevuto da %s:%d => [\"%s\"]\n",
+		printf("PID=[%d]: Received by %s:%d => [\"%s\"]\n",
 			getpid(),inet_ntoa(dest_addr.sin_addr), ntohs(dest_addr.sin_port),recvmsg);
 	}
 
