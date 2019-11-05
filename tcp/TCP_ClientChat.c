@@ -1,5 +1,4 @@
-// Client di chat per esercizio
-
+// A simple chat client, made for practice
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -10,7 +9,7 @@
 #include <errno.h>
 #include <unistd.h>
 
-char * fgets_nonl(char*msg, size_t len, FILE *fp)
+char * fgets_nonl(char*msg, size_t len, FILE *fp)	// wrapper function for fgets, changes final '\n' to '\0'
 {
 	if(fgets(msg,len,fp) != 0)
 	{
@@ -33,11 +32,11 @@ int main(int argc, char*argv[])
 		return 1;
 	}
 
-	sockfd = socket(AF_INET,SOCK_STREAM,0);		// Socket del client
-	sockoc = socket(AF_INET,SOCK_STREAM,0);		// Socket del server
+	sockfd = socket(AF_INET,SOCK_STREAM,0);		// Socket client
+	sockoc = socket(AF_INET,SOCK_STREAM,0);		// Socket server
 
-	pid = fork(); // Primo fork(), 'divide' il programma in server e client
-	if(pid==0) // parte ["server"]
+	pid = fork(); // First fork(), 'splits' the program in server and client
+	if(pid==0) // ["server"]
 	{
 		memset((char*) &local_addr,0,sizeof(local_addr));
 		local_addr.sin_family=AF_INET;
@@ -46,7 +45,7 @@ int main(int argc, char*argv[])
 		
 		bind(sockoc, (struct sockaddr *) &local_addr, sizeof(local_addr));
 
-		listen(sockoc, 5); // il secondo parametro è la lunghezza della coda di attesa
+		listen(sockoc, 5); // listen(socket, waiting_queue_size)
 		printf ("\n[%d] Listening on [%d]\n", getpid(), ntohs(local_addr.sin_port));
 
 		for(;;)
@@ -58,8 +57,8 @@ int main(int argc, char*argv[])
 				sleep(5);
 			}
 			
-
 			close(sockoc);
+			
 			for(;;)
 			{
 				n = recv(newsockoc,recvmsg,999,0);
@@ -75,14 +74,13 @@ int main(int argc, char*argv[])
 		}
 		
 	}
-	else // parte ["client"]
+	else // ["client"]
 	{
 
 		memset(&dest_addr,0,sizeof(dest_addr));
 		dest_addr.sin_family = AF_INET;		
 		dest_addr.sin_addr.s_addr = inet_addr(argv[1]);
 		dest_addr.sin_port= htons(atoi(argv[2]));
-		
 
 		while (connect(sockfd, (struct sockaddr *) &dest_addr, sizeof(dest_addr)) < 0)
 		{
